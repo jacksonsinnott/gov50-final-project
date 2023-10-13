@@ -7,8 +7,16 @@ output:
     self_contained: false
 ---
 
-
-
 ## Project thoughts
 
 I am interested in exploring data related to US drone proliferation and drone strikes in Afghanistan from 2001-2021. I have already written a lenghty, qualitative paper on this issue and am interested in incorporating data into my overall analysis of the subject.
+
+## Project Proposal
+
+How does the notion that a golf putter belongs to a professional golfer (PGA Pro), affect a regular golfers confidence in their putting skill when using that putter? I will be using data from a 2011 study that attempted to measure Positive Contagion in Golf Performance. With this study, I plan to examine whether or not prior knowledge that a putter once belonged to a well known professional golfer, affects the confidence and putting skill level of an average, everyday player while using the putter. I believe that this knowledge will positively affect putting skill, due to the thought that it will raise the confidence level of the participant, which will increase their overall capability. The explanatory variable will be the "putter" used by the participants within the experiment. There are two putters in the experiment: one that the observer will give no history or background knowledge of (Control), and one that the observer explains used to belong to a PGA Pro (Treatment). The two outcome variables are "hole size", and "putts made". After receiving information on the putter they are using, the participants were asked to draw a to-scale representation of the hole they would be putting towards. The participants then take ten putts, which is measured by the outcome variable of putts made. These two metrics will be used to gauge confidence, based on an increase or decrease in target size and in overall putts made. My hypothesis would be supported by a greater perceived target size by the Treatment group and a greater percentage of putts made by the Treatment group. Both of these instances arguably support the hypothesis that confidence is increase from Treatment. Moreover, an observation of no correlation or increases in these outcomes within the Control group would disprove my hypothesis.
+
+```{r}
+Lee_Pro_Putting_Raw_Data
+```
+
+
