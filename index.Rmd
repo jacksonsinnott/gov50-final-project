@@ -19,11 +19,5 @@ https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/15CITZ
 https://doi.org/10.7910/DVN/15CITZ
 
 
-```{r}
-baseball <- retrosheetdata
-baseball
-```
-
-
 
 
