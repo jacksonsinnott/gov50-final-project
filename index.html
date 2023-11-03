@@ -115,7 +115,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["Copy of retrosheetdata.csv","index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/header-attrs-2.17/header-attrs.js","index_files/header-attrs-2.24/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["Data/Copy_of_retrosheetdata.csv","index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/figure-html5/unnamed-chunk-3-1.png","index_files/header-attrs-2.17/header-attrs.js","index_files/header-attrs-2.24/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1524,7 +1524,116 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <p>How does the presence of fans at Major League Baseball (MLB) games affect home field advantage? In this study, I plan to examine: A) home field advantage in the MLB and B) whether or not the presence or absence of fans affects home field advantage. I hypothesize that home field advantage positively affects win percentage, but that home teams who play in front of their fans have a much higher win percentage than home teams that played in empty stadiums during the 2020 COVID-19 season. I expect that teams playing on their home fields are more likely to win compared to when they are traveling and playing at “away” parks, but that playing in front of home town fans amplifies this effect, and the absence of fans diminishes the effectiveness of home field advantage. My sample is comprised of MLB game data from 2015-2020, in which the games between 2015-2019 were played under normal conditions but games played during the 2020 season were played without fans in attendance. The explanatory variable of interest is attendance, which is measured numerically by the number of people who attended each baseball game. My outcome variable is whether or not the home team won or lost the game. Currently, the data set only has the raw scores by both the home and away teams, so I will need to create a separate column for “home team outcome” that is coded =1 (win) or =0 (loss). To support my hypothesis, I will first need to confirm that home field advantage exists in the MLB. Since MLB teams play an equal amount of home and away games in their 162-game season, home field advantage would be represented by a increase in average win percentage at home compared to away. Then, using the COVID data from the 2020 season where there were no fans, a decrease in average home field win percentage would confirm my hypothesis that the presence of fans affects home field advantage. My hypothesis would be disproved either by the absence of evidence supporting home field advantage or by there being no significant change in the home field win percentage during regular years compared to the COVID year.</p>
 <p><a href="https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/15CITZ" class="uri">https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/15CITZ</a>
 <a href="https://doi.org/10.7910/DVN/15CITZ" class="uri">https://doi.org/10.7910/DVN/15CITZ</a></p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>MLB</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"data/Copy_of_retrosheetdata.csv"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>MLB</span> <span class='op'>&lt;-</span> <span class='va'>MLB</span> <span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='op'>-</span><span class='va'>Number_of_game</span>, <span class='op'>-</span><span class='va'>Day_of_week</span>, <span class='op'>-</span><span class='va'>Visiting_team_game_number</span>, <span class='op'>-</span><span class='va'>Home_team_game_number</span>, <span class='op'>-</span><span class='va'>Length_of_game_in_outs</span>, <span class='op'>-</span><span class='va'>Completion_information</span>, <span class='op'>-</span><span class='va'>Forfeit_information</span>, <span class='op'>-</span><span class='va'>Protest_information</span>, <span class='va'>Visiting_line_scores</span>, <span class='op'>-</span><span class='va'>Home_line_scores</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>MLB</span> <span class='op'>&lt;-</span> <span class='va'>MLB</span> <span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>Home_team_win <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/if_else.html'>if_else</a></span><span class='op'>(</span><span class='va'>Home_team_score</span> <span class='op'>&gt;</span> <span class='va'>Visiting_team_score</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>MLB</span><span class='op'>$</span><span class='va'>Attendance</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/if_else.html'>if_else</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>MLB</span><span class='op'>$</span><span class='va'>Attendance</span><span class='op'>)</span>, <span class='fl'>0</span>, <span class='va'>MLB</span><span class='op'>$</span><span class='va'>Attendance</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>MLB</span><span class='op'>$</span><span class='va'>Date</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='va'>MLB</span><span class='op'>$</span><span class='va'>Date</span>, format <span class='op'>=</span> <span class='st'>"%m/%d/%Y"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>MLB</span> <span class='op'>&lt;-</span> <span class='va'>MLB</span> <span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>Year <span class='op'>=</span> <span class='fu'><a href='https://lubridate.tidyverse.org/reference/year.html'>year</a></span><span class='op'>(</span><span class='va'>Date</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>MLB_19</span> <span class='op'>&lt;-</span> <span class='va'>MLB</span> <span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>Year</span> <span class='op'>==</span> <span class='fl'>19</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>MLB_20</span> <span class='op'>&lt;-</span> <span class='va'>MLB</span> <span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>Year</span> <span class='op'>==</span> <span class='fl'>20</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>MLB_1920</span> <span class='op'>&lt;-</span> <span class='va'>MLB</span> <span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>Year</span> <span class='op'>&gt;=</span> <span class='fl'>19</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>MLB_19</span> <span class='op'>&lt;-</span> <span class='va'>MLB_19</span> <span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>home_win_pct19 <span class='op'>=</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>Home_team_win</span> <span class='op'>==</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>*</span> <span class='fl'>100</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>MLB_20</span> <span class='op'>&lt;-</span> <span class='va'>MLB_20</span> <span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>home_win_pct20 <span class='op'>=</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>Home_team_win</span> <span class='op'>==</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>*</span> <span class='fl'>100</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>MLB_1920</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>Year</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>`Home Team Win %` <span class='op'>=</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Home_team_win</span><span class='op'>)</span> <span class='op'>*</span> <span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 2 × 2
+   Year `Home Team Win %`
+  &lt;dbl&gt;             &lt;dbl&gt;
+1    19              52.9
+2    20              55.0</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>MLB_19</span></span></code></pre>
+</div>
+<pre><code># A tibble: 2,429 × 15
+   Date       Visiting_team Visiting_team_league Home_team
+   &lt;date&gt;     &lt;chr&gt;         &lt;chr&gt;                &lt;chr&gt;    
+ 1 0019-03-20 SEA           AL                   OAK      
+ 2 0019-03-21 SEA           AL                   OAK      
+ 3 0019-03-28 PIT           NL                   CIN      
+ 4 0019-03-28 ARI           NL                   LAN      
+ 5 0019-03-28 COL           NL                   MIA      
+ 6 0019-03-28 SLN           NL                   MIL      
+ 7 0019-03-28 ATL           NL                   PHI      
+ 8 0019-03-28 SFN           NL                   SDN      
+ 9 0019-03-28 NYN           NL                   WAS      
+10 0019-03-28 CHA           AL                   KCA      
+# ℹ 2,419 more rows
+# ℹ 11 more variables: Home_team_league &lt;chr&gt;,
+#   Visiting_team_score &lt;dbl&gt;, Home_team_score &lt;dbl&gt;,
+#   Day_night &lt;chr&gt;, Park_ID &lt;chr&gt;, Attendance &lt;dbl&gt;,
+#   Time_of_game_in_minutes &lt;dbl&gt;, Visiting_line_scores &lt;chr&gt;,
+#   Home_team_win &lt;dbl&gt;, Year &lt;dbl&gt;, home_win_pct19 &lt;dbl&gt;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>MLB_20</span></span></code></pre>
+</div>
+<pre><code># A tibble: 898 × 15
+   Date       Visiting_team Visiting_team_league Home_team
+   &lt;date&gt;     &lt;chr&gt;         &lt;chr&gt;                &lt;chr&gt;    
+ 1 0020-07-23 SFN           NL                   LAN      
+ 2 0020-07-23 NYA           AL                   WAS      
+ 3 0020-07-24 MIL           NL                   CHN      
+ 4 0020-07-24 DET           AL                   CIN      
+ 5 0020-07-24 SFN           NL                   LAN      
+ 6 0020-07-24 ATL           NL                   NYN      
+ 7 0020-07-24 MIA           NL                   PHI      
+ 8 0020-07-24 ARI           NL                   SDN      
+ 9 0020-07-24 PIT           NL                   SLN      
+10 0020-07-24 BAL           AL                   BOS      
+# ℹ 888 more rows
+# ℹ 11 more variables: Home_team_league &lt;chr&gt;,
+#   Visiting_team_score &lt;dbl&gt;, Home_team_score &lt;dbl&gt;,
+#   Day_night &lt;chr&gt;, Park_ID &lt;chr&gt;, Attendance &lt;dbl&gt;,
+#   Time_of_game_in_minutes &lt;dbl&gt;, Visiting_line_scores &lt;chr&gt;,
+#   Home_team_win &lt;dbl&gt;, Year &lt;dbl&gt;, home_win_pct20 &lt;dbl&gt;</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>MLB</span> <span class='op'>&lt;-</span> <span class='va'>MLB</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>Year</span><span class='op'>)</span> <span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>`Home Team Win %` <span class='op'>=</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Home_team_win</span><span class='op'>)</span> <span class='op'>*</span> <span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>home_field_plot</span> <span class='op'>&lt;-</span> <span class='va'>MLB</span> <span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>mapping <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>Year</span>, y <span class='op'>=</span> <span class='va'>`Home Team Win %`</span>, fill <span class='op'>=</span> <span class='va'>Year</span>, color <span class='op'>=</span> <span class='va'>Year</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_col</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Home Team Win Percentage by Year"</span>,</span>
+<span>       x <span class='op'>=</span> <span class='st'>"Year"</span>,</span>
+<span>       y <span class='op'>=</span> <span class='st'>"Home Team Win Percentage"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>ylim</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>75</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>home_field_plot</span></span></code></pre>
+</div>
+<p><img src="index_files/figure-html5/unnamed-chunk-3-1.png" width="624" /></p>
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

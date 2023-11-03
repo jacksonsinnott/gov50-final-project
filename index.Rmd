@@ -20,6 +20,65 @@ How does the presence of fans at Major League Baseball (MLB) games affect home f
 https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/15CITZ
 https://doi.org/10.7910/DVN/15CITZ
 
+```{r}
+library(tidyverse)
 
+MLB <- read_csv("data/Copy_of_retrosheetdata.csv")
 
+MLB <- MLB |>
+  select(-Number_of_game, -Day_of_week, -Visiting_team_game_number, -Home_team_game_number, -Length_of_game_in_outs, -Completion_information, -Forfeit_information, -Protest_information, Visiting_line_scores, -Home_line_scores)
+
+MLB <- MLB |>
+  mutate(Home_team_win = if_else(Home_team_score > Visiting_team_score, 1, 0))
+
+MLB$Attendance <- if_else(is.na(MLB$Attendance), 0, MLB$Attendance)
+
+MLB$Date <- as.Date(MLB$Date, format = "%m/%d/%Y")
+
+MLB <- MLB |>
+  mutate(Year = year(Date))
+
+MLB_19 <- MLB |>
+  filter(Year == 19)
+
+MLB_20 <- MLB |>
+  filter(Year == 20)
+
+MLB_1920 <- MLB |>
+  filter(Year >= 19)
+
+```
+
+```{r}
+
+MLB_19 <- MLB_19 |>
+  mutate(home_win_pct19 = (sum(Home_team_win == 1) / n()) * 100)
+
+MLB_20 <- MLB_20 |>
+  mutate(home_win_pct20 = (sum(Home_team_win == 1) / n()) * 100)
+
+MLB_1920 %>% 
+  group_by(Year) %>% 
+  summarize(`Home Team Win %` = (mean(Home_team_win) * 100))
+
+MLB_19
+MLB_20
+```
+
+```{r}
+MLB <- MLB |> 
+  group_by(Year) |>
+  summarize(`Home Team Win %` = (mean(Home_team_win) * 100))
+
+home_field_plot <- MLB |>
+  ggplot(mapping = aes(x = Year, y = `Home Team Win %`, fill = Year, color = Year)) +
+  geom_col() +
+  labs(title = "Home Team Win Percentage by Year",
+       x = "Year",
+       y = "Home Team Win Percentage") +
+  ylim(0, 75)
+
+home_field_plot
+
+```
 
