@@ -11,7 +11,7 @@ output:
 
 I am interested in exploring data related to US drone proliferation and drone strikes in Afghanistan from 2001-2021. I have already written a lenghty, qualitative paper on this issue and am interested in incorporating data into my overall analysis of the subject.
 
-After looking through data sources, I have since redirected my focus towards examining the effects of COVID-19 on attendance of MLB games, and how the presence or absence of fans affected home field advantage.
+***After looking through data sources, I have since redirected my focus towards examining the effects of COVID-19 on attendance of MLB games, and how the presence or absence of fans affected home field advantage.
 
 ## Project Proposal
 
