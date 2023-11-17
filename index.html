@@ -1517,10 +1517,9 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 
 <div class="d-article">
-<h2 id="project-thoughts">Project thoughts</h2>
-<p>I am interested in exploring data related to US drone proliferation and drone strikes in Afghanistan from 2001-2021. I have already written a lenghty, qualitative paper on this issue and am interested in incorporating data into my overall analysis of the subject.</p>
-<p>***After looking through data sources, I have since redirected my focus towards examining the effects of COVID-19 on attendance of MLB games, and how the presence or absence of fans affected home field advantage.</p>
-<h2 id="project-proposal">Project Proposal</h2>
+<h2 id="milestone-1-project-thoughts">Milestone 1: Project Thoughts</h2>
+<p>I am interested in examining the phenomenon of Home Field Advantage in the MLB, and how the presence or absence of fans affects this concept. I will be using MLB data from 2015-2020, which includes the 2020 COVID-19 season when no fans were present at games.</p>
+<h2 id="milestone-2-project-proposal">Milestone 2: Project Proposal</h2>
 <p>How does the presence of fans at Major League Baseball (MLB) games affect home field advantage? In this study, I plan to examine: A) home field advantage in the MLB and B) whether or not the presence or absence of fans affects home field advantage. I hypothesize that home field advantage positively affects win percentage, but that home teams who play in front of their fans have a much higher win percentage than home teams that played in empty stadiums during the 2020 COVID-19 season. I expect that teams playing on their home fields are more likely to win compared to when they are traveling and playing at “away” parks, but that playing in front of home town fans amplifies this effect, and the absence of fans diminishes the effectiveness of home field advantage. My sample is comprised of MLB game data from 2015-2020, in which the games between 2015-2019 were played under normal conditions but games played during the 2020 season were played without fans in attendance. The explanatory variable of interest is attendance, which is measured numerically by the number of people who attended each baseball game. My outcome variable is whether or not the home team won or lost the game. Currently, the data set only has the raw scores by both the home and away teams, so I will need to create a separate column for “home team outcome” that is coded =1 (win) or =0 (loss). To support my hypothesis, I will first need to confirm that home field advantage exists in the MLB. Since MLB teams play an equal amount of home and away games in their 162-game season, home field advantage would be represented by a increase in average win percentage at home compared to away. Then, using the COVID data from the 2020 season where there were no fans, a decrease in average home field win percentage would confirm my hypothesis that the presence of fans affects home field advantage. My hypothesis would be disproved either by the absence of evidence supporting home field advantage or by there being no significant change in the home field win percentage during regular years compared to the COVID year.</p>
 <p><a href="https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/15CITZ" class="uri">https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/15CITZ</a>
 <a href="https://doi.org/10.7910/DVN/15CITZ" class="uri">https://doi.org/10.7910/DVN/15CITZ</a></p>
@@ -1550,9 +1549,13 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>Year</span> <span class='op'>==</span> <span class='fl'>20</span><span class='op'>)</span></span>
 <span></span>
 <span><span class='va'>MLB_1920</span> <span class='op'>&lt;-</span> <span class='va'>MLB</span> <span class='op'>|&gt;</span></span>
-<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>Year</span> <span class='op'>&gt;=</span> <span class='fl'>19</span><span class='op'>)</span></span></code></pre>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>Year</span> <span class='op'>&gt;=</span> <span class='fl'>19</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>MLB_healthy</span> <span class='op'>&lt;-</span> <span class='va'>MLB</span> <span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>Year</span> <span class='op'>&lt;</span> <span class='fl'>20</span><span class='op'>)</span></span></code></pre>
 </div>
 </div>
+<h2 id="milestone-3-one-data-visualization">Milestone 3: One Data Visualization</h2>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>MLB_19</span> <span class='op'>&lt;-</span> <span class='va'>MLB_19</span> <span class='op'>|&gt;</span></span>
@@ -1617,11 +1620,11 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>MLB</span> <span class='op'>&lt;-</span> <span class='va'>MLB</span> <span class='op'>|&gt;</span> </span>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>MLB_win_pct</span> <span class='op'>&lt;-</span> <span class='va'>MLB</span> <span class='op'>|&gt;</span> </span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>Year</span><span class='op'>)</span> <span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>`Home Team Win %` <span class='op'>=</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Home_team_win</span><span class='op'>)</span> <span class='op'>*</span> <span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span></span>
 <span></span>
-<span><span class='va'>home_field_plot</span> <span class='op'>&lt;-</span> <span class='va'>MLB</span> <span class='op'>|&gt;</span></span>
+<span><span class='va'>home_field_plot</span> <span class='op'>&lt;-</span> <span class='va'>MLB_win_pct</span> <span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>mapping <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>Year</span>, y <span class='op'>=</span> <span class='va'>`Home Team Win %`</span>, fill <span class='op'>=</span> <span class='va'>Year</span>, color <span class='op'>=</span> <span class='va'>Year</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
 <span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_col</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
 <span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Home Team Win Percentage by Year"</span>,</span>
@@ -1633,7 +1636,134 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <p><img src="index_files/figure-html5/unnamed-chunk-3-1.png" width="624" /></p>
 </div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<h2 id="milestone-4-one-analysis">Milestone 4: One Analysis</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>MLB</span> <span class='op'>&lt;-</span> <span class='va'>MLB</span> <span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>Attendance_bi <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/if_else.html'>if_else</a></span><span class='op'>(</span><span class='va'>Attendance</span> <span class='op'>&gt;=</span> <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Home_team_win</span> <span class='op'>~</span> <span class='va'>Attendance_bi</span>, data <span class='op'>=</span> <span class='va'>MLB</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>
+Call:
+lm(formula = Home_team_win ~ Attendance_bi, data = MLB)
+
+Coefficients:
+  (Intercept)  Attendance_bi  
+      0.54632       -0.01238  </code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>MLB_healthy</span> <span class='op'>&lt;-</span> <span class='va'>MLB_healthy</span> <span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>Attendance100 <span class='op'>=</span> <span class='va'>Attendance</span> <span class='op'>/</span> <span class='fl'>100</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Home_team_win</span> <span class='op'>~</span> <span class='va'>Attendance</span> <span class='op'>+</span> <span class='va'>Home_team</span>, data <span class='op'>=</span> <span class='va'>MLB_healthy</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>
+Call:
+lm(formula = Home_team_win ~ Attendance + Home_team, data = MLB_healthy)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-0.6712 -0.5194  0.3668  0.4739  0.5952 
+
+Coefficients:
+               Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   4.775e-01  3.384e-02  14.109  &lt; 2e-16 ***
+Attendance    1.235e-06  6.213e-07   1.987  0.04694 *  
+Home_teamARI  3.728e-03  3.557e-02   0.105  0.91652    
+Home_teamATL -1.200e-02  3.528e-02  -0.340  0.73377    
+Home_teamBAL -1.720e-02  3.598e-02  -0.478  0.63270    
+Home_teamBOS  5.346e-02  3.491e-02   1.531  0.12573    
+Home_teamCHA -2.537e-02  3.640e-02  -0.697  0.48582    
+Home_teamCHN  1.054e-01  3.489e-02   3.022  0.00251 ** 
+Home_teamCIN -4.002e-02  3.591e-02  -1.114  0.26514    
+Home_teamCLE  8.756e-02  3.627e-02   2.414  0.01577 *  
+Home_teamCOL  8.047e-03  3.494e-02   0.230  0.81785    
+Home_teamDET -7.264e-02  3.550e-02  -2.046  0.04077 *  
+Home_teamHOU  1.011e-01  3.509e-02   2.881  0.00397 ** 
+Home_teamKCA -6.156e-03  3.557e-02  -0.173  0.86259    
+Home_teamLAN  1.271e-01  3.540e-02   3.592  0.00033 ***
+Home_teamMIA -2.280e-02  3.719e-02  -0.613  0.53991    
+Home_teamMIL  2.308e-02  3.502e-02   0.659  0.50993    
+Home_teamMIN  1.400e-02  3.561e-02   0.393  0.69409    
+Home_teamNYA  1.002e-01  3.495e-02   2.868  0.00414 ** 
+Home_teamNYN  1.535e-02  3.513e-02   0.437  0.66223    
+Home_teamOAK  3.147e-02  3.655e-02   0.861  0.38936    
+Home_teamPHI  1.539e-03  3.559e-02   0.043  0.96552    
+Home_teamPIT  2.284e-02  3.591e-02   0.636  0.52471    
+Home_teamSDN -4.835e-02  3.533e-02  -1.369  0.17114    
+Home_teamSEA -1.620e-02  3.555e-02  -0.456  0.64854    
+Home_teamSFN -1.484e-02  3.492e-02  -0.425  0.67098    
+Home_teamSLN  3.772e-02  3.507e-02   1.076  0.28209    
+Home_teamTBA  4.216e-02  3.752e-02   1.124  0.26112    
+Home_teamTEX  1.945e-02  3.523e-02   0.552  0.58086    
+Home_teamTOR  1.483e-02  3.499e-02   0.424  0.67167    
+Home_teamWAS  6.248e-02  3.514e-02   1.778  0.07545 .  
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 0.4967 on 12116 degrees of freedom
+Multiple R-squared:  0.01134,   Adjusted R-squared:  0.008892 
+F-statistic: 4.632 on 30 and 12116 DF,  p-value: 7.5e-16</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>MLB</span> <span class='op'>&lt;-</span> <span class='va'>MLB</span> <span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>Attendance_100 <span class='op'>=</span> <span class='va'>Attendance</span> <span class='op'>/</span> <span class='fl'>100</span><span class='op'>)</span> </span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Home_team_win</span> <span class='op'>~</span> <span class='va'>Attendance</span> <span class='op'>+</span> <span class='va'>Home_team</span>, data <span class='op'>=</span> <span class='va'>MLB</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>
+Call:
+lm(formula = Home_team_win ~ Attendance + Home_team, data = MLB)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-0.6696 -0.5192  0.3668  0.4752  0.5736 
+
+Coefficients:
+               Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   5.066e-01  2.788e-02  18.166  &lt; 2e-16 ***
+Attendance    4.403e-07  4.180e-07   1.053  0.29222    
+Home_teamARI -2.379e-03  3.395e-02  -0.070  0.94413    
+Home_teamATL -8.100e-03  3.384e-02  -0.239  0.81081    
+Home_teamBAL -3.101e-02  3.412e-02  -0.909  0.36344    
+Home_teamBOS  3.731e-02  3.369e-02   1.108  0.26800    
+Home_teamCHA -2.890e-02  3.431e-02  -0.842  0.39959    
+Home_teamCHN  1.038e-01  3.367e-02   3.082  0.00206 ** 
+Home_teamCIN -4.500e-02  3.409e-02  -1.320  0.18686    
+Home_teamCLE  7.678e-02  3.425e-02   2.242  0.02501 *  
+Home_teamCOL -1.267e-03  3.370e-02  -0.038  0.97001    
+Home_teamDET -8.017e-02  3.397e-02  -2.360  0.01829 *  
+Home_teamHOU  1.013e-01  3.376e-02   3.000  0.00271 ** 
+Home_teamKCA -1.388e-02  3.395e-02  -0.409  0.68278    
+Home_teamLAN  1.393e-01  3.387e-02   4.113 3.93e-05 ***
+Home_teamMIA -3.644e-02  3.464e-02  -1.052  0.29282    
+Home_teamMIL  1.802e-02  3.373e-02   0.534  0.59328    
+Home_teamMIN  2.304e-02  3.397e-02   0.678  0.49761    
+Home_teamNYA  1.092e-01  3.370e-02   3.240  0.00120 ** 
+Home_teamNYN  4.935e-03  3.377e-02   0.146  0.88384    
+Home_teamOAK  3.016e-02  3.436e-02   0.878  0.38017    
+Home_teamPHI -2.286e-03  3.397e-02  -0.067  0.94633    
+Home_teamPIT  4.410e-03  3.411e-02   0.129  0.89711    
+Home_teamSDN -4.006e-02  3.386e-02  -1.183  0.23677    
+Home_teamSEA -2.083e-02  3.395e-02  -0.614  0.53949    
+Home_teamSFN -7.724e-03  3.369e-02  -0.229  0.81868    
+Home_teamSLN  3.915e-02  3.375e-02   1.160  0.24609    
+Home_teamTBA  3.667e-02  3.477e-02   1.055  0.29162    
+Home_teamTEX  1.467e-02  3.382e-02   0.434  0.66435    
+Home_teamTOR  1.544e-02  3.372e-02   0.458  0.64706    
+Home_teamWAS  4.869e-02  3.378e-02   1.441  0.14954    
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 0.4967 on 13014 degrees of freedom
+Multiple R-squared:  0.01055,   Adjusted R-squared:  0.008273 
+F-statistic: 4.627 on 30 and 13014 DF,  p-value: 7.828e-16</code></pre>
+</div>
+<p>After filtering the data to include only seasons in which fans are present at games (2015-2019), we see a positive relationship between teams with a high home team win percentage and fan turnout at these games. This could mean two things: either that good teams attract more fans, or that a greater attendance motivates teams to perform better, which would support conventional thoughts surrounding home field advantage. There are also other confounding variables to consider, such as the fact that home teams do not travel to home games, they are familiar with their setting, and get to prepare in their usual locker room and practice facilities.</p>
+<p>However, looking at the 2020 season during COVID-19 in which no fans were present at games, we see that home teams actually have a higher average win percentage than the five previous years in the data set (Visualization 1). Through this analysis, we can infer that fan presence or attendance does not affect home team performance as much as other known and unknown varaibles, and that higher attendance metrics are more so products of team performance.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

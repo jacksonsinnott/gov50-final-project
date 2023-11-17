@@ -7,13 +7,11 @@ output:
     self_contained: false
 ---
 
-## Project thoughts
+## Milestone 1: Project thoughts
 
-I am interested in exploring data related to US drone proliferation and drone strikes in Afghanistan from 2001-2021. I have already written a lenghty, qualitative paper on this issue and am interested in incorporating data into my overall analysis of the subject.
+I am interested in examining the phenomenon of Home Field Advantage in the MLB, and how the presence or absence of fans affects this concept. I will be using MLB data from 2015-2020, which includes the 2020 COVID-19 season when no fans were present at games.
 
-***After looking through data sources, I have since redirected my focus towards examining the effects of COVID-19 on attendance of MLB games, and how the presence or absence of fans affected home field advantage.
-
-## Project Proposal
+## Milestone 2: Project Proposal
 
 How does the presence of fans at Major League Baseball (MLB) games affect home field advantage? In this study, I plan to examine: A) home field advantage in the MLB and B) whether or not the presence or absence of fans affects home field advantage. I hypothesize that home field advantage positively affects win percentage, but that home teams who play in front of their fans have a much higher win percentage than home teams that played in empty stadiums during the 2020 COVID-19 season. I expect that teams playing on their home fields are more likely to win compared to when they are traveling and playing at "away" parks, but that playing in front of home town fans amplifies this effect, and the absence of fans diminishes the effectiveness of home field advantage. My sample is comprised of MLB game data from 2015-2020, in which the games between 2015-2019 were played under normal conditions but games played during the 2020 season were played without fans in attendance. The explanatory variable of interest is attendance, which is measured numerically by the number of people who attended each baseball game. My outcome variable is whether or not the home team won or lost the game. Currently, the data set only has the raw scores by both the home and away teams, so I will need to create a separate column for "home team outcome" that is coded =1 (win) or =0 (loss). To support my hypothesis, I will first need to confirm that home field advantage exists in the MLB. Since MLB teams play an equal amount of home and away games in their 162-game season, home field advantage would be represented by a increase in average win percentage at home compared to away. Then, using the COVID data from the 2020 season where there were no fans, a decrease in average home field win percentage would confirm my hypothesis that the presence of fans affects home field advantage. My hypothesis would be disproved either by the absence of evidence supporting home field advantage or by there being no significant change in the home field win percentage during regular years compared to the COVID year.
 
@@ -47,7 +45,11 @@ MLB_20 <- MLB |>
 MLB_1920 <- MLB |>
   filter(Year >= 19)
 
+MLB_healthy <- MLB |>
+  filter(Year < 20)
+
 ```
+## Milestone 3: One data visualization
 
 ```{r}
 
@@ -66,11 +68,11 @@ MLB_20
 ```
 
 ```{r}
-MLB <- MLB |> 
+MLB_win_pct <- MLB |> 
   group_by(Year) |>
   summarize(`Home Team Win %` = (mean(Home_team_win) * 100))
 
-home_field_plot <- MLB |>
+home_field_plot <- MLB_win_pct |>
   ggplot(mapping = aes(x = Year, y = `Home Team Win %`, fill = Year, color = Year)) +
   geom_col() +
   labs(title = "Home Team Win Percentage by Year",
@@ -82,3 +84,30 @@ home_field_plot
 
 ```
 
+## Milestone 4: One analysis
+
+```{r}
+MLB <- MLB |>
+  mutate(Attendance_bi = if_else(Attendance >= 1, 1, 0))
+
+lm(Home_team_win ~ Attendance_bi, data = MLB)
+
+```
+
+
+```{r}
+MLB_healthy <- MLB_healthy |>
+  mutate(Attendance100 = Attendance / 100)
+
+summary(lm(Home_team_win ~ Attendance + Home_team, data = MLB_healthy))
+
+```
+```{r}
+MLB <- MLB |>
+  mutate(Attendance_100 = Attendance / 100) 
+summary(lm(Home_team_win ~ Attendance + Home_team, data = MLB))
+
+```
+After filtering the data to include only seasons in which fans are present at games (2015-2019), we see a positive relationship between teams with a high home team win percentage and fan turnout at these games. This could mean two things: either that good teams attract more fans, or that a greater attendance motivates teams to perform better, which would support conventional thoughts surrounding home field advantage. There are also other confounding variables to consider, such as the fact that home teams do not travel to home games, they are familiar with their setting, and get to prepare in their usual locker room and practice facilities.
+
+However, looking at the 2020 season during COVID-19 in which no fans were present at games, we see that home teams actually have a higher average win percentage than the five previous years in the data set (Visualization 1). Through this analysis, we can infer that fan presence or attendance does not affect home team performance as much as other known and unknown varaibles, and that higher attendance metrics are more so products of team performance.
