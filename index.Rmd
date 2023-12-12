@@ -7,16 +7,18 @@ output:
     self_contained: false
 ---
 
-## Milestone 1: Project thoughts
+## Introduction
 
-I am interested in examining the phenomenon of Home Field Advantage in the MLB, and how the presence or absence of fans affects this concept. I will be using MLB data from 2015-2020, which includes the 2020 COVID-19 season when no fans were present at games.
+How does the presence of fans at Major League Baseball (MLB) games affect "home field advantage"? Is home field advantage even real? Home field advantage is a common perception in sports, whereby the home team gains some intangible advantage simply by playing at their home field in front of their own fans. This advantage is so coveted that until 2017 the MLB All-Star Game was played between the American League and National League and the winner received home field advantage in the World Series. However, in 2020 MLB played the entire regular season without a single fan in attendance due to COVID-19. This unprecedented season was uniquely marked in many different ways, but for the first time in MLB history there was not a single fan in attendance at these games. 
 
-## Milestone 2: Project Proposal
+In this study, I plan to examine: A) home field advantage in the MLB and B) whether or not the presence or absence of fans affects home field advantage. I hypothesize that home field advantage alone positively affects overall win percentage, but that home teams who played in front of their fans before the COVID-19 season have a much higher win percentage than home teams that played in empty stadiums during the 2020 COVID-19 season. I expect that teams playing on their home fields are more likely to win compared to when they are traveling and playing at away parks, but that playing in front of home town fans amplifies this effect, and the absence of fans diminishes the effectiveness of home field advantage. 
 
-How does the presence of fans at Major League Baseball (MLB) games affect home field advantage? In this study, I plan to examine: A) home field advantage in the MLB and B) whether or not the presence or absence of fans affects home field advantage. I hypothesize that home field advantage positively affects win percentage, but that home teams who play in front of their fans have a much higher win percentage than home teams that played in empty stadiums during the 2020 COVID-19 season. I expect that teams playing on their home fields are more likely to win compared to when they are traveling and playing at "away" parks, but that playing in front of home town fans amplifies this effect, and the absence of fans diminishes the effectiveness of home field advantage. My sample is comprised of MLB game data from 2015-2020, in which the games between 2015-2019 were played under normal conditions but games played during the 2020 season were played without fans in attendance. The explanatory variable of interest is attendance, which is measured numerically by the number of people who attended each baseball game. My outcome variable is whether or not the home team won or lost the game. Currently, the data set only has the raw scores by both the home and away teams, so I will need to create a separate column for "home team outcome" that is coded =1 (win) or =0 (loss). To support my hypothesis, I will first need to confirm that home field advantage exists in the MLB. Since MLB teams play an equal amount of home and away games in their 162-game season, home field advantage would be represented by a increase in average win percentage at home compared to away. Then, using the COVID data from the 2020 season where there were no fans, a decrease in average home field win percentage would confirm my hypothesis that the presence of fans affects home field advantage. My hypothesis would be disproved either by the absence of evidence supporting home field advantage or by there being no significant change in the home field win percentage during regular years compared to the COVID year.
+The effect that fans have on win percentage is an incredibly important statistic for team owners and managers to be aware of. If my hypothesis is correct, and fans do have a positive effect on home field advantage and win percentage, then teams, especially those with low fan turnout rates, should be doing everything in their power to incentive fan attendance. 
 
 https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/15CITZ
 https://doi.org/10.7910/DVN/15CITZ
+
+## Cleaning the Data
 
 ```{r}
 library(tidyverse)
@@ -29,12 +31,27 @@ MLB <- MLB |>
 MLB <- MLB |>
   mutate(Home_team_win = if_else(Home_team_score > Visiting_team_score, 1, 0))
 
+MLB <- MLB |>
+  mutate(Away_team_win = if_else(Home_team_score < Visiting_team_score, 1, 0))
+
 MLB$Attendance <- if_else(is.na(MLB$Attendance), 0, MLB$Attendance)
 
 MLB$Date <- as.Date(MLB$Date, format = "%m/%d/%Y")
 
 MLB <- MLB |>
   mutate(Year = year(Date))
+
+MLB_15 <- MLB |>
+  filter(Year == 15)
+
+MLB_16 <- MLB |>
+  filter(Year == 16)
+
+MLB_17 <- MLB |>
+  filter(Year == 17)
+
+MLB_18 <- MLB |>
+  filter(Year == 18)
 
 MLB_19 <- MLB |>
   filter(Year == 19)
@@ -49,30 +66,28 @@ MLB_healthy <- MLB |>
   filter(Year < 20)
 
 ```
-## Milestone 3: One data visualization
 
 ```{r}
 
-MLB_19 <- MLB_19 |>
-  mutate(home_win_pct19 = (sum(Home_team_win == 1) / n()) * 100)
 
-MLB_20 <- MLB_20 |>
-  mutate(home_win_pct20 = (sum(Home_team_win == 1) / n()) * 100)
+```
 
-MLB_1920 %>% 
+## Visualizing the Data
+
+```{r}
+home_team <- MLB %>% 
   group_by(Year) %>% 
   summarize(`Home Team Win %` = (mean(Home_team_win) * 100))
 
-MLB_19
-MLB_20
-```
+knitr::kable(home_team, digits = 2)
 
-```{r}
-MLB_win_pct <- MLB |> 
-  group_by(Year) |>
-  summarize(`Home Team Win %` = (mean(Home_team_win) * 100))
+away_team <- MLB %>% 
+  group_by(Year) %>% 
+  summarize(`Away Team Win %` = (mean(Away_team_win) * 100))
 
-home_field_plot <- MLB_win_pct |>
+knitr::kable(away_team, digits = 2)
+
+home_field_plot <- home_team |>
   ggplot(mapping = aes(x = Year, y = `Home Team Win %`, fill = Year, color = Year)) +
   geom_col() +
   labs(title = "Home Team Win Percentage by Year",
@@ -83,31 +98,56 @@ home_field_plot <- MLB_win_pct |>
 home_field_plot
 
 ```
+My sample is comprised of MLB game data from 2015-2020, in which the games between 2015-2019 were played under normal conditions, but games played during the 2020 season were played without fans in attendance. The explanatory variable of interest is attendance, which is measured numerically by the number of people who attended each baseball game. My outcome variable is whether or not the home team won or lost the game. The data set only had the raw scores of both the home and away teams, so I created a separate column for "home team outcome" that is coded =1 (win) or =0 (loss). 
 
-## Milestone 4: One analysis
+To support my hypothesis, I first needed to confirm that home field advantage exists in the MLB. Since MLB teams play an equal amount of home and away games in their 162-game season, home field advantage would be represented by an average win percentage at home of over 50%. Then, using the COVID data from the 2020 season where there were no fans, a decrease in average home field win percentage would confirm my hypothesis that the presence of fans affects home field advantage. My hypothesis would be disproved either by the absence of evidence supporting home field advantage or by there being no significant change in the home field win percentage during regular years compared to the COVID year.
+
+Based on this analysis and subsequent plot, we can see that home field advantage does in fact exist, due to the fact that home teams won over 50% of their home games in each year from 2015-2020, regardless of whether or not fans were present (COVID-19 2020 season). However, it is interesting to note that the 2020 COVID-19 season produced the highest home team win percentage (55.01) despite there being no fans. This data begins to question whether or not fans have an effect on home field advantage, or if there were other confounding variables at play. 
+
+## Data Analysis
+
+### Regression 1
 
 ```{r}
 MLB <- MLB |>
   mutate(Attendance_bi = if_else(Attendance >= 1, 1, 0))
 
-lm(Home_team_win ~ Attendance_bi, data = MLB)
+lm_1 <- lm(Home_team_win ~ Attendance_bi, data = MLB)
+
+modelsummary::modelsummary(lm_1,
+                           statistic = c("s.e. = {std.error}",
+                                         "p = {p.value}"),
+                           gof_map = c("nobs", "r.squared", "adj.r.squared"))
 
 ```
 
+### Regression 2
 
 ```{r}
 MLB_healthy <- MLB_healthy |>
-  mutate(Attendance100 = Attendance / 100)
+  mutate(Attendance2500 = Attendance / 2500)
 
-summary(lm(Home_team_win ~ Attendance + Home_team, data = MLB_healthy))
+lm_2 <- summary(lm(Home_team_win ~ Attendance2500, data = MLB_healthy))
+
+modelsummary::modelsummary(lm_2,
+                           statistic = c("s.e. = {std.error}",
+                                         "p = {p.value}"),
+                           gof_map = c("nobs", "r.squared", "adj.r.squared"))
 
 ```
-```{r}
-MLB <- MLB |>
-  mutate(Attendance_100 = Attendance / 100) 
-summary(lm(Home_team_win ~ Attendance + Home_team, data = MLB))
 
-```
-After filtering the data to include only seasons in which fans are present at games (2015-2019), we see a positive relationship between teams with a high home team win percentage and fan turnout at these games. This could mean two things: either that good teams attract more fans, or that a greater attendance motivates teams to perform better, which would support conventional thoughts surrounding home field advantage. There are also other confounding variables to consider, such as the fact that home teams do not travel to home games, they are familiar with their setting, and get to prepare in their usual locker room and practice facilities.
+In the first regression model, I looked at the relationship between home team win percentage and attendance, which was measured on a binary scale of 1 (fans present, 2015-2019) or 0 (fans absent, 2020). The intercept value of .546 reflects the home team win percentage when attendance is controlled for our held at 0, which gives us the estimated home team win percentage (54.6%) for the 2020 COVID-19 season since there were no fans. The "attendance_bi" value of -.012 reflects the change in home team win percentage for every one value increase in the attendance variable. Since our attendance is measured as 0 or 1, a one value increase gives us the estimated average home team win percentage when fans are present, and the -0.012 value means that our intercept value decreases by that amount. In simple terms, we see a home team win percentage of 54.6% without fans, and an average of 53.5% with fans. The standard error of 0.016 suggests that this estimate is relatively precise, and the p-value of <0.001 also suggest that the data is statistically significant, however there are many other confounding variables at play that need to be tested and controlled for. 
 
-However, looking at the 2020 season during COVID-19 in which no fans were present at games, we see that home teams actually have a higher average win percentage than the five previous years in the data set (Visualization 1). Through this analysis, we can infer that fan presence or attendance does not affect home team performance as much as other known and unknown varaibles, and that higher attendance metrics are more so products of team performance.
+In the second regression, I filtered the data to only include the 2015-2019 seasons, to examine further whether or not the specific amount of fans had an effect on home team win percentage. Controlling for the attendance, the estimated average home team win percentage across the MLB was .454 or 45%. However, with every increase of 2500 fans in attendance, home team win percentage increases by .007 or .7%. This tells us that the number of fans has a positive relationship with home team win percentage. The relatively low standard error and p-value tells us that our estimates are confidently precise and statistically significant.
+
+After filtering the data to include only seasons in which fans are present at games (2015-2019), we see a positive relationship between home team win percentage and fan turnout at these games. However, this does not necessarily indicated that more fans increase home team win percentage. On the other hand, it could simply mean that better teams attract more fans. Therefore, we can not certainly deduce that there is causality, but rather only correlation.
+
+## Conclusion
+
+In the first data visualization, we see that the home teams actually won more games during the 2020 COVID-19 season, than they did in any of the five previous seasons while playing at home, and the first regression model confirms that the presence of fans is correlated with a lower win percentage. However, since we only have one season's worth of data where no fans were present, it is hard to argue causation. Additionally, there are many other confounding variables that affect the 2020 season, such as travel restrictions, quarantine procedures for the away teams, and players having to miss time with illness or suspected illness that likely comes with travel. 
+
+Through the regression models, we do however see a positive relationship between home team win percentage and fan attendance numbers. This could mean two things: either that good teams attract more fans, or that a greater attendance motivates teams to perform better, which would support conventional thoughts surrounding home field advantage. There are also other confounding variables to consider, such as the fact that home teams do not travel to home games, they are familiar with their setting, and get to prepare in their usual locker room and practice facilities.
+
+Through this analysis, we can infer that fan presence does not affect home team performance as much as other known and unknown variables, and that higher attendance metrics are more so products of team performance. Although we saw an increase in win percentage during the 2020 season, it was only incremental and was in keeping with the natural fluctuation in the years prior. Therefore, I am able to confirm that home field advantage does exist, but that fans are not the main contributing factor to this phenomenon. 
+
+In addition to all of the previously mentioned confounders, we are only able to examine one season where fans were absent, and so our sample is extremely limited and could simply be an anomaly. Given more time, I would examine the relationship between home team win percentage prior to and during COVID across all major league sports, to increase my sample size and therefore get a more accurate estimate as to just how much or how little the presence of fans affects home team win percentage.
